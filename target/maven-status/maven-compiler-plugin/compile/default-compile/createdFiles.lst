@@ -1,0 +1,4 @@
+com/algaworks/brewer/controller/CervejasController.class
+com/algaworks/brewer/config/WebConfig.class
+com/algaworks/brewer/config/init/AppIntializer.class
+com/algaworks/brewer/model/Cerveja.class
