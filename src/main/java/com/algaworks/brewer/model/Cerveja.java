@@ -1,21 +1,31 @@
 package com.algaworks.brewer.model;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.context.annotation.EnableLoadTimeWeaving;
+
+import com.algaworks.brewer.validation.SKU;
 
 @Entity
 @Table(name="cerveja")
-public class Cerveja {
+public class Cerveja implements Serializable{
+	
+	
+	private static final long serialVersionUID = 1L;
 	
 	private Long codigo;
 	private String sku;
@@ -26,6 +36,9 @@ public class Cerveja {
 	private BigDecimal teorAlcoolico;
 	private BigDecimal comissao;
 	private Integer quantidadeEstoque;
+	private Origem origem;
+	private Sabor sabor;
+	private Estilo estilo;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +49,7 @@ public class Cerveja {
 		this.codigo = codigo;
 	}
 	
-	
+	@SKU
 	@NotBlank(message="SKU é obrigatorio")
 	public String getSku() {
 		return sku;
@@ -64,7 +77,7 @@ public class Cerveja {
 	}
 	
 	
-	
+	@Transient
 	public String getFoto() {
 		return foto;
 	}
@@ -105,8 +118,55 @@ public class Cerveja {
 		this.quantidadeEstoque = quantidadeEstoque;
 	}
 	
+	@Enumerated(EnumType.STRING)
+	public Origem getOrigem() {
+		return origem;
+	}
+	public void setOrigem(Origem origem) {
+		this.origem = origem;
+	}
+	
+	@Enumerated(EnumType.STRING)
+	public Sabor getSabor() {
+		return sabor;
+	}
+	public void setSabor(Sabor sabor) {
+		this.sabor = sabor;
+	}
+	
+	@ManyToOne
+	@JoinColumn(name="codigo_estilo")
+	public Estilo getEstilo() {
+		return estilo;
+	}
+	public void setEstilo(Estilo estilo) {
+		this.estilo = estilo;
+	}
 	
 	
-	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((codigo == null) ? 0 : codigo.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Cerveja other = (Cerveja) obj;
+		if (codigo == null) {
+			if (other.codigo != null)
+				return false;
+		} else if (!codigo.equals(other.codigo))
+			return false;
+		return true;
+	}
+		
 	
 }
