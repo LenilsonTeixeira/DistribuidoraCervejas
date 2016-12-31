@@ -12,8 +12,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -50,7 +56,7 @@ public class Cerveja implements Serializable{
 	}
 	
 	@SKU
-	@NotBlank(message="SKU é obrigatorio")
+	@NotBlank(message="O sku é obrigatório")
 	public String getSku() {
 		return sku;
 	}
@@ -59,7 +65,7 @@ public class Cerveja implements Serializable{
 	}
 	
 	
-	@NotBlank(message="Nome é obrigatorio")
+	@NotBlank(message="O nome é obrigatório")
 	public String getNome() {
 		return nome;
 	}
@@ -67,7 +73,7 @@ public class Cerveja implements Serializable{
 		this.nome = nome;
 	}
 	
-	@NotBlank(message="Descrição é obrigatoria")
+	@NotBlank(message="A descrição é obrigatória")
 	@Size(max=250 , message="A Descrição deve possuir no maximo 250 caracteres")
 	public String getDescricao() {
 		return descricao;
@@ -85,7 +91,9 @@ public class Cerveja implements Serializable{
 		this.foto = foto;
 	}
 	
-	
+	@NotNull(message="O valor da cerveja é obrigatório")
+	@DecimalMax(value="9999999.99" , message="O valor não pode ser maior do que R$ 9.999.999.99")
+	@DecimalMin(value="1.00",message="O valor não pode ser menor que R$ 1,00")
 	public BigDecimal getValor() {
 		return valor;
 	}
@@ -93,7 +101,8 @@ public class Cerveja implements Serializable{
 		this.valor = valor;
 	}
 	
-	
+	@NotNull(message="O teor alcóolico é obrigatório")
+	@DecimalMax(value="100.0" , message="O valor do teor alcóolico deve ser menor que 100")
 	@Column(name="teor_alcoolico")
 	public BigDecimal getTeorAlcoolico() {
 		return teorAlcoolico;
@@ -102,7 +111,8 @@ public class Cerveja implements Serializable{
 		this.teorAlcoolico = teorAlcoolico;
 	}
 	
-	
+	@NotNull(message="A comissão é obrigatória")
+	@DecimalMax(value="100.0" , message="A comissão deve ser igual ou menor que 100")
 	public BigDecimal getComissao() {
 		return comissao;
 	}
@@ -110,6 +120,8 @@ public class Cerveja implements Serializable{
 		this.comissao = comissao;
 	}
 	
+	@NotNull(message="A quantidade em estoque é obrigatória")
+	@Max(value= 999999 ,message="A quantidade em estoque deve ser menor que 999.999")
 	@Column(name="quantidade_estoque")
 	public Integer getQuantidadeEstoque() {
 		return quantidadeEstoque;
@@ -118,6 +130,7 @@ public class Cerveja implements Serializable{
 		this.quantidadeEstoque = quantidadeEstoque;
 	}
 	
+	@NotNull(message="O origem é obrigatória")
 	@Enumerated(EnumType.STRING)
 	public Origem getOrigem() {
 		return origem;
@@ -126,6 +139,7 @@ public class Cerveja implements Serializable{
 		this.origem = origem;
 	}
 	
+	@NotNull(message="O sabor é obrigatório")
 	@Enumerated(EnumType.STRING)
 	public Sabor getSabor() {
 		return sabor;
@@ -134,6 +148,7 @@ public class Cerveja implements Serializable{
 		this.sabor = sabor;
 	}
 	
+	@NotNull(message="O estilo é obrigatório")
 	@ManyToOne
 	@JoinColumn(name="codigo_estilo")
 	public Estilo getEstilo() {
@@ -141,6 +156,12 @@ public class Cerveja implements Serializable{
 	}
 	public void setEstilo(Estilo estilo) {
 		this.estilo = estilo;
+	}
+	
+	@PrePersist
+	@PreUpdate
+	private void prePersistUpdate(){
+		this.sku = sku.toUpperCase();
 	}
 	
 	

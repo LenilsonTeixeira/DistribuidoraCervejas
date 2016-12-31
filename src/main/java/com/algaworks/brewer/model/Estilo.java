@@ -9,6 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name="estilo")
@@ -31,6 +35,9 @@ public class Estilo implements Serializable{
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
 	}
+	
+	@NotEmpty(message="O estilo é obrigatório")
+	@Size(max=30 , message="O estilo deve conter no máximo 30 caracteres")
 	public String getNome() {
 		return nome;
 	}
