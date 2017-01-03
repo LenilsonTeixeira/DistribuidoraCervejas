@@ -38,6 +38,7 @@ public class Cerveja implements Serializable{
 	private String nome;
 	private String descricao;
 	private String foto;
+	private String contentType;
 	private BigDecimal valor;
 	private BigDecimal teorAlcoolico;
 	private BigDecimal comissao;
@@ -83,12 +84,21 @@ public class Cerveja implements Serializable{
 	}
 	
 	
-	@Transient
+	
 	public String getFoto() {
 		return foto;
 	}
 	public void setFoto(String foto) {
 		this.foto = foto;
+	}
+	
+	@Column(name = "content_type")
+	public String getContentType() {
+		return contentType;
+	}
+	
+	public void setContentType(String contentType) {
+		this.contentType = contentType;
 	}
 	
 	@NotNull(message="O valor da cerveja é obrigatório")
