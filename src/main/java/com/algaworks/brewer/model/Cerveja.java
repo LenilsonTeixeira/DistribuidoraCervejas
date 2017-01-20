@@ -15,6 +15,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
@@ -46,6 +47,12 @@ public class Cerveja implements Serializable{
 	private Origem origem;
 	private Sabor sabor;
 	private Estilo estilo;
+
+	@PrePersist
+	@PreUpdate
+	private void prePersistUpdate(){
+		this.sku = sku.toUpperCase();
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -168,15 +175,11 @@ public class Cerveja implements Serializable{
 		this.estilo = estilo;
 	}
 	
+	@Transient
 	public String getFotoOuMock(){
 		return !StringUtils.isEmpty(foto) ? foto : "cerveja-mock.png";
 	}
 	
-	@PrePersist
-	@PreUpdate
-	private void prePersistUpdate(){
-		this.sku = sku.toUpperCase();
-	}
 	
 	
 	@Override
